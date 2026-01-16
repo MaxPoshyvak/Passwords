@@ -3,8 +3,28 @@ import { cn } from '@/lib/utils';
 
 interface Props {
     className?: string;
+    type: string;
+    placeholder?: string;
+    title: string;
+    labelClasses?: string;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const input: React.FC<Props> = ({ className }) => {
-    return <input className={cn('w-5 h-[90%] bg-grey-300', className)} />;
+export const Input: React.FC<Props> = ({ title, type, placeholder, labelClasses, className, handleChange }) => {
+    return (
+        <div>
+            <label htmlFor="name" className={labelClasses}>
+                {title}
+            </label>
+            <input
+                id="name"
+                name="name"
+                type={type}
+                required
+                placeholder={placeholder}
+                className={cn(className, '')}
+                onChange={handleChange}
+            />
+        </div>
+    );
 };
