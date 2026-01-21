@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb';
 import { PasswordEntry } from '@/models/Password';
 // import { decrypt } from '@/lib/crypto';
 import { checkUserByToken } from '@/lib/checkUserByToken';
+import { encrypt, decrypt } from '@/lib/crypto';
 
 export async function GET() {
     try {
@@ -19,7 +20,7 @@ export async function GET() {
             _id: entry._id,
             title: entry.title,
             username: entry.username,
-            password: entry.encryptedPassword,
+            password: decrypt(entry.encryptedPassword),
             url: entry.url,
             category: entry.category,
             createdAt: entry.createdAt,
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
             userId: user._id,
             title,
             username,
-            encryptedPassword: password,
+            encryptedPassword: encrypt(password),
             url,
             category,
         });
@@ -60,7 +61,7 @@ export async function POST(request: Request) {
                 _id: newEntry._id,
                 title: newEntry.title,
                 username: newEntry.username,
-                password: newEntry.encryptedPassword,
+                password: decrypt(newEntry.encryptedPassword),
                 url: newEntry.url,
                 category: newEntry.category,
                 createdAt: newEntry.createdAt,

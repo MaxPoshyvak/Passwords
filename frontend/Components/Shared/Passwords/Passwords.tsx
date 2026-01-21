@@ -6,6 +6,7 @@ import type { Category, PasswordEntryWithId } from '@/types/PasswordsTypes/Passw
 
 import { AddPasswordModal, PasswordCard } from '@/Components/Ui';
 import { Sidebar, Header } from '@/Components/Shared';
+import { decrypt } from '@/lib/crypto';
 
 export function Passwords() {
     const [entries, setEntries] = useState<PasswordEntryWithId[]>([]);

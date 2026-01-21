@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { Category, PasswordEntryWithId } from '@/types/PasswordsTypes/PasswordTypes';
 import { Eye, EyeOff, Trash2, Copy } from 'lucide-react';
+import Link from 'next/link';
+import getFullUrl from '@/lib/getFullUrl';
 
 export function PasswordCard({
     entry,
@@ -41,7 +43,9 @@ export function PasswordCard({
                     </div>
                     <div>
                         <h3 className="font-bold text-slate-800">{entry.title}</h3>
-                        <p className="text-xs text-slate-500">{entry.url || 'website'}</p>
+                        <Link href={getFullUrl(entry.url)} target="_blank" className="text-xs text-slate-500 underline">
+                            {entry.url || 'website'}
+                        </Link>
                     </div>
                 </div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
