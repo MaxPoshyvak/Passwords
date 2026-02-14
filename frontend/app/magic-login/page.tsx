@@ -1,7 +1,10 @@
 'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
 
 export default function MagicLoginPage() {
     const searchParams = useSearchParams();
