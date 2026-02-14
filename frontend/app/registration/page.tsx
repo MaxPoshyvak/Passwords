@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import { Input } from '@/Components/Ui/';
+import { Input } from '@/Components/Ui/Input';
 import Link from 'next/link';
 
 export default function Registration() {
