@@ -14,7 +14,7 @@ export default function MagicLinkLogin() {
         // Імітація відправки
 
         try {
-            const response = await fetch('http://localhost:3000/api/auth/magic-link', {
+            const response = await fetch('/api/auth/magic-link', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -2,6 +2,9 @@ import { User } from '@/models/User';
 import { MagicToken } from '@/models/MagicToken';
 import { generateToken } from '@/utils/generateToken';
 import { connectDB } from '@/lib/mongodb';
+import { sendMagicLinkEmail } from '@/lib/email';
+
+const BASE_URL = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 export async function POST(req: Request) {
     const { email } = await req.json();
@@ -11,7 +14,6 @@ export async function POST(req: Request) {
     }
 
     await connectDB();
-    // створюємо користувача, якщо нема
     await User.findOneAndUpdate({ email }, { email }, { upsert: true });
 
     const token = generateToken();
@@ -23,11 +25,17 @@ export async function POST(req: Request) {
         expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 хв
     });
 
-    const link = `http://localhost:3000/magic-login?token=${token}`;
+    const link = `${BASE_URL.replace(/\/$/, '')}/magic-login?token=${token}`;
 
-    // await sendMagicLinkEmail(email, link);
-
-    console.log('Magic link sent to:', email, link);
+    try {
+        await sendMagicLinkEmail(email, link);
+    } catch (err) {
+        console.error('Failed to send magic link email:', err);
+        return new Response(
+            JSON.stringify({ message: 'Failed to send email. Check SMTP configuration.' }),
+            { status: 500 }
+        );
+    }
 
     return new Response(JSON.stringify({ message: 'Magic link sent' }), { status: 200 });
 }
