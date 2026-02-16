@@ -15,7 +15,8 @@ export const authOptions: AuthOptions = {
                 try {
                     await connectDB();
 
-                    const response = await fetch(`http://localhost:3000/api/auth/verify?token=${credentials?.token}`, {
+                    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+                    const response = await fetch(`${baseUrl.replace(/\/$/, '')}/api/auth/verify?token=${credentials?.token}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
