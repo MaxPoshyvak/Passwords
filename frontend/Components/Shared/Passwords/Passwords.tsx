@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Search, CheckCircle2 } from 'lucide-react';
+import Swal from 'sweetalert2';
 import type { Category, PasswordEntryWithId } from '@/types/PasswordsTypes/PasswordTypes';
 
 import { AddPasswordModal, PasswordCard } from '@/Components/Ui';
@@ -54,7 +55,20 @@ export function Passwords() {
 
     // Actions
     const handleDelete = async (id: string) => {
-        if (!window.confirm('Ви впевнені, що хочете видалити цей пароль?')) return;
+        const result = await Swal.fire({
+            title: 'Видалити пароль?',
+            text: 'Цю дію неможливо скасувати.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Так, видалити',
+            cancelButtonText: 'Скасувати',
+            reverseButtons: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            focusCancel: true,
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             const response = await fetch(`/api/passwords/${id}`, {

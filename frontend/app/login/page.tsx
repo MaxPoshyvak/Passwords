@@ -7,11 +7,13 @@ import React, { useState } from 'react';
 export default function MagicLinkLogin() {
     const [email, setEmail] = useState('');
     const [isSent, setIsSent] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email) return;
-        // Імітація відправки
+        if (!email || isLoading) return;
+
+        setIsLoading(true);
 
         try {
             const response = await fetch('/api/auth/magic-link', {
@@ -25,12 +27,14 @@ export default function MagicLinkLogin() {
             if (!response.ok) {
                 console.log('Failed to send magic link');
             }
+
+            console.log(`Magic link надіслано на: ${email}`);
+            setIsSent(true);
         } catch (error) {
             console.log(error);
+        } finally {
+            setIsLoading(false);
         }
-
-        console.log(`Magic link надіслано на: ${email}`);
-        setIsSent(true);
     };
 
     const inputClasses =
@@ -89,8 +93,16 @@ export default function MagicLinkLogin() {
 
                     <button
                         type="submit"
-                        className="w-full bg-black text-white font-medium py-2.5 rounded-lg hover:bg-gray-800 transition-colors mt-2 active:scale-95 transform duration-100">
-                        Надіслати посилання
+                        disabled={isLoading}
+                        className="w-full bg-black text-white font-medium py-2.5 rounded-lg hover:bg-gray-800 transition-colors mt-2 active:scale-95 transform duration-100 disabled:opacity-60 disabled:cursor-not-allowed">
+                        {isLoading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <span className="inline-block h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                                <span>Надсилання...</span>
+                            </span>
+                        ) : (
+                            'Надіслати посилання'
+                        )}
                     </button>
                 </form>
 
